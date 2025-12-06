@@ -31,7 +31,18 @@ export async function setupVite(app: Express, server: Server) {
     appType: "custom",
   });
 
-  app.use(vite.middlewares);
+  // Check if it's an API route first, otherwise serve Vite dev server
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+      // Let Express handle API routes
+      next();
+    } else {
+      // Let Vite handle everything else (client-side routes, static files)
+      vite.middlewares(req, res, next);
+    }
+  });
+
+  // Fallback to serve index.html for client-side routing
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 

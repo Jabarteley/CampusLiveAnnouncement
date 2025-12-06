@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Bell, RefreshCw } from "lucide-react";
@@ -11,22 +11,10 @@ export default function Noticeboard() {
   const [selectedCategory, setSelectedCategory] = useState<
     AnnouncementCategory | "All"
   >("All");
-  const [lastRefresh, setLastRefresh] = useState(Date.now());
-
-  // Fetch announcements with auto-refresh
-  const { data: announcements = [], isLoading, refetch } = useQuery<Announcement[]>({
-    queryKey: ["/api/announcements", lastRefresh],
+  const { data: announcements = [], isLoading } = useQuery<Announcement[]>({
+    queryKey: ["/api/announcements"],
+    refetchInterval: 30000, // auto-refresh every 30 seconds
   });
-
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLastRefresh(Date.now());
-      refetch();
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [refetch]);
 
   // Filter announcements
   const filteredAnnouncements = announcements.filter((announcement) => {

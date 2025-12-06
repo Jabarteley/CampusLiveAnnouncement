@@ -1,13 +1,27 @@
 {
-  "announcements": [],
-  "users": [
+  "announcements": [
     {
-      "id": "41735873",
-      "email": "barbiepeach71@gmail.com",
-      "firstName": "jabar",
-      "lastName": "Asaju",
-      "createdAt": "2025-11-25T13:11:51.844Z",
-      "updatedAt": "2025-11-25T13:13:53.587Z"
+      "title": "test",
+      "content": "tesrjfhljknkl;m;kpo",
+      "category": "General",
+      "imageUrl": "/uploads/1764082336090-118786687.jpg",
+      "authorId": "admin",
+      "authorName": "admin@example.com",
+      "id": "23206d1d-0fc5-45c5-9bff-2710a7444832",
+      "createdAt": "2025-11-25T14:52:16.109Z",
+      "updatedAt": "2025-11-25T14:52:16.109Z"
+    }
+  ],
+  "users": [
+    
+    {
+      "id": "admin",
+      "email": "admin@example.com",
+      "firstName": "Admin",
+      "lastName": "",
+      "profileImageUrl": "",
+      "createdAt": "2025-11-25T14:33:04.317Z",
+      "updatedAt": "2025-11-25T14:33:04.317Z"
     }
   ]
 }

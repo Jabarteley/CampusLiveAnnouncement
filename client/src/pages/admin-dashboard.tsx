@@ -98,7 +98,7 @@ export default function AdminDashboard() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/login";
         }, 500);
         return;
       }
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "/login";
         }, 500);
         return;
       }
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
       const response = await apiRequest("POST", "/api/summarize", {
         text: content,
       });
-      const data = await response;
+      const data = await response.json();
 
       if (data.summary) {
         toast({
@@ -324,8 +324,17 @@ export default function AdminDashboard() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  window.location.href = "/api/logout";
+                onClick={async () => {
+                  try {
+                    await fetch("/api/logout", {
+                      method: "POST",
+                    });
+                    // Simple redirect after logout
+                    window.location.href = "/login";
+                  } catch (error) {
+                    console.error("Logout error:", error);
+                    window.location.href = "/login";
+                  }
                 }}
                 className="backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
                 data-testid="button-logout"

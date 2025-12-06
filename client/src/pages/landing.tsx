@@ -132,7 +132,7 @@ export default function Landing() {
                 size="lg"
                 variant="outline"
                 className="text-base px-8 py-6 rounded-xl backdrop-blur-md bg-white/50 dark:bg-gray-800/50 border-2"
-                onClick={() => (window.location.href = "/api/login")}
+                onClick={() => (window.location.href = "/login")}
                 data-testid="button-admin-login"
               >
                 Admin Login

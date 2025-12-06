@@ -33,6 +33,7 @@ async function writeDatabase(db: Database): Promise<void> {
 export interface IStorage {
   // User operations for Replit Auth
   getUser(id: string): Promise<User | undefined>;
+  getUsersByField(field: string, value: string): Promise<User[]>;
   upsertUser(user: UpsertUser): Promise<User>;
 
   // Announcement operations
@@ -48,6 +49,11 @@ export class JsonStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const db = await readDatabase();
     return db.users.find((user) => user.id === id);
+  }
+
+  async getUsersByField(field: string, value: string): Promise<User[]> {
+    const db = await readDatabase();
+    return db.users.filter((user) => (user as any)[field] === value);
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {

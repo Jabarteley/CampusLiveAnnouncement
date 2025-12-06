@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated } from "./simpleAuth";
 import multer from "multer";
 import path from "path";
 import fs from "fs/promises";
@@ -57,21 +57,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }, express.static(uploadDir));
 
   // Auth routes - public endpoint that returns user if authenticated, null otherwise
-  app.get("/api/auth/user", async (req: any, res) => {
-    try {
-      // Check if user is authenticated
-      if (!req.isAuthenticated() || !req.user?.claims?.sub) {
-        return res.json(null);
-      }
-
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // This is now handled by setupAuth in simpleAuth.ts
 
   // Get all announcements (public route)
   app.get("/api/announcements", async (req, res) => {
@@ -105,8 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     upload.single("image"),
     async (req: any, res) => {
       try {
-        const userId = req.user.claims.sub;
-        const user = await storage.getUser(userId);
+        const user = req.session.user;
 
         if (!user) {
           return res.status(404).json({ message: "User not found" });
@@ -166,7 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           summary,
           category,
           imageUrl,
-          authorId: userId,
+          authorId: user.id,
           authorName,
         });
 

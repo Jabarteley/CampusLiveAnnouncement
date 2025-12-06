@@ -13,6 +13,6 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user && !isUnauthorized,
-    loginUrl: "/api/login",
+    loginUrl: "/login",
   };
 }
