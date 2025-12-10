@@ -9,7 +9,7 @@ import fs from "fs/promises";
 import OpenAI from "openai";
 
 // OpenAI setup for AI summarization (optional - only if API key is provided)
-// the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
+
 const openai = process.env.OPENAI_API_KEY 
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
@@ -97,7 +97,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(404).json({ message: "User not found" });
         }
 
-        const { title, content, category } = req.body;
+        const { title, content, category, summary: clientSummary, eventDate } = req.body;
 
         // Validate required fields
         if (!title || !title.trim()) {
@@ -120,11 +120,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         // Generate AI summary if content is long enough and OpenAI is available
-        let summary: string | undefined;
-        if (openai && content.length > 200) {
+        let summary: string | undefined = clientSummary;
+        if (!summary && openai && content.length > 200) {
           try {
             const response = await openai.chat.completions.create({
-              model: "gpt-5",
+              model: "gpt-4",
               messages: [
                 {
                   role: "system",
@@ -153,6 +153,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           imageUrl,
           authorId: user.id,
           authorName,
+          eventDate,
         });
 
         res.status(201).json(announcement);
@@ -172,23 +173,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     upload.single("image"),
     async (req: any, res) => {
       try {
-        const { title, content, category } = req.body;
+        const { title, content, category, summary: clientSummary, eventDate } = req.body;
 
         const updateData: any = {};
 
         if (title) updateData.title = title;
         if (content) updateData.content = content;
         if (category) updateData.category = category;
+        if (clientSummary) updateData.summary = clientSummary;
+        if (eventDate) updateData.eventDate = eventDate;
 
         if (req.file) {
           updateData.imageUrl = `/uploads/${req.file.filename}`;
         }
 
         // Regenerate AI summary if content is updated and long enough and OpenAI is available
-        if (openai && content && content.length > 200) {
+        if (!clientSummary && openai && content && content.length > 200) {
           try {
             const response = await openai.chat.completions.create({
-              model: "gpt-5",
+              model: "gpt-4",
               messages: [
                 {
                   role: "system",
@@ -262,7 +265,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const response = await openai.chat.completions.create({
-        model: "gpt-5",
+        model: "gpt-4",
         messages: [
           {
             role: "system",

@@ -16,6 +16,10 @@ export const insertAnnouncementSchema = z.object({
   imageUrl: z.string().optional(),
   authorId: z.string(),
   authorName: z.string(),
+  eventDate: z.object({
+    from: z.string().optional(),
+    to: z.string().optional(),
+  }).optional(),
 });
 
 export const announcementSchema = insertAnnouncementSchema.extend({

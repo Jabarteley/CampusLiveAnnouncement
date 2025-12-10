@@ -128,7 +128,7 @@ export default function Landing() {
               >
                 View Announcements
               </Button>
-              <Button
+              {/* <Button
                 size="lg"
                 variant="outline"
                 className="text-base px-8 py-6 rounded-xl backdrop-blur-md bg-white/50 dark:bg-gray-800/50 border-2"
@@ -136,7 +136,7 @@ export default function Landing() {
                 data-testid="button-admin-login"
               >
                 Admin Login
-              </Button>
+              </Button> */}
             </motion.div>
           </motion.div>
 
@@ -145,6 +145,7 @@ export default function Landing() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
             className="text-sm text-muted-foreground"
+            onClick={() => (window.location.href = "/login")}
           >
             Powered by AI • Real-time Updates • Accessible Design
           </motion.p>

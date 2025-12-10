@@ -67,8 +67,16 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-950 dark:to-blue-950 p-4">
-      <Card className="w-full max-w-md backdrop-blur-lg bg-white/40 dark:bg-gray-900/40 border-white/20 dark:border-gray-700/30">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md backdrop-blur-lg bg-white/40 dark:bg-gray-900/40 border-white/20 dark:border-gray-700/30 relative">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="absolute top-4 left-4 p-2 flex items-center gap-2"
+          onClick={() => window.location.href = "/"}
+        >
+          ← Back
+        </Button>
+        <CardHeader className="text-center pt-8">
           <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg shadow-purple-500/30 mb-4">
             <Lock className="w-8 h-8 text-white" />
           </div>
@@ -124,14 +132,7 @@ export default function LoginPage() {
               )}
             </Button>
           </form>
-          
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
-              <strong>Default credentials:</strong><br />
-              Username: admin<br />
-              Password: password123
-            </p>
-          </div>
+
         </CardContent>
       </Card>
     </div>

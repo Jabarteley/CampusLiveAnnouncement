@@ -69,6 +69,12 @@ export default function Noticeboard() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-3"
             >
+              <button
+                onClick={() => window.location.href = "/"}
+                className="mr-4 p-2 rounded-lg hover:bg-white/20 dark:hover:bg-gray-800/30 transition-colors"
+              >
+                ← Back
+              </button>
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg shadow-purple-500/30">
                 <Bell className="w-6 h-6 text-white" />
               </div>

@@ -8,7 +8,6 @@ import {
   LogOut,
   TrendingUp,
   FileText,
-  Calendar,
   Sparkles,
   Upload,
   X,
@@ -37,6 +36,7 @@ export default function AdminDashboard() {
   const [, navigate] = useLocation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [summary, setSummary] = useState("");
   const [category, setCategory] = useState<AnnouncementCategory>("General");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -173,6 +173,7 @@ export default function AdminDashboard() {
       const data = await response.json();
 
       if (data.summary) {
+        setSummary(data.summary);
         toast({
           title: "Summary generated",
           description: "AI summary has been created successfully",
@@ -222,6 +223,14 @@ export default function AdminDashboard() {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
+    formData.append("summary", summary);
+    // Skip eventDate since we removed the calendar functionality
+    // if (eventDate?.from) {
+    //   formData.append("eventDate[from]", eventDate.from.toISOString());
+    // }
+    // if (eventDate?.to) {
+    //   formData.append("eventDate[to]", eventDate.to.toISOString());
+    // }
 
     if (imageFile) {
       formData.append("image", imageFile);
@@ -235,6 +244,16 @@ export default function AdminDashboard() {
     setTitle(announcement.title);
     setContent(announcement.content);
     setCategory(announcement.category);
+    setSummary(announcement.summary || "");
+    // Skip setting event dates since we removed calendar functionality
+    // if (announcement.eventDate?.from) {
+    //   setEventDate({
+    //     from: new Date(announcement.eventDate.from),
+    //     to: announcement.eventDate.to
+    //       ? new Date(announcement.eventDate.to)
+    //       : undefined,
+    //   });
+    // }
     if (announcement.imageUrl) {
       setImagePreview(announcement.imageUrl);
     }
@@ -254,6 +273,8 @@ export default function AdminDashboard() {
     setImageFile(null);
     setImagePreview("");
     setEditingId(null);
+    setSummary("");
+    setEventDate(undefined);
   };
 
   if (authLoading) {
@@ -280,7 +301,7 @@ export default function AdminDashboard() {
     {
       label: "Events",
       value: announcements.filter((a) => a.category === "Events").length,
-      icon: Calendar,
+      icon: Bell,
       color: "from-purple-500 to-pink-500",
     },
     {
@@ -464,6 +485,31 @@ export default function AdminDashboard() {
                     rows={6}
                     className="backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
                     data-testid="textarea-content"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="summary">AI Summary (optional)</Label>
+                  <Textarea
+                    id="summary"
+                    value={summary}
+                    onChange={(e) => setSummary(e.target.value)}
+                    placeholder="AI-generated summary will appear here"
+                    rows={3}
+                    className="mt-2 backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
+                    data-testid="textarea-summary"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="event-date">Event Date (optional)</Label>
+                  <Input
+                    id="event-date-from"
+                    type="text"
+                    placeholder="Event date functionality removed (optional)"
+                    className="mt-2 backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
+                    value=""
+                    readOnly
                   />
                 </div>
 

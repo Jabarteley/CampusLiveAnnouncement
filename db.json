@@ -7,13 +7,38 @@
       "imageUrl": "/uploads/1764082336090-118786687.jpg",
       "authorId": "admin",
       "authorName": "admin@example.com",
+      "eventDate": {},
       "id": "23206d1d-0fc5-45c5-9bff-2710a7444832",
       "createdAt": "2025-11-25T14:52:16.109Z",
       "updatedAt": "2025-11-25T14:52:16.109Z"
+    },
+    {
+      "title": "End of year party",
+      "content": "it is going to be party after party after party",
+      "category": "Events",
+      "imageUrl": "/uploads/1765037295414-919117847.png",
+      "authorId": "admin",
+      "authorName": "admin@example.com",
+      "eventDate": {},
+      "id": "98c6aedc-c2d8-4db0-a048-e23e5f037bfa",
+      "createdAt": "2025-12-06T16:08:15.480Z",
+      "updatedAt": "2025-12-06T16:08:15.480Z"
+    },
+    {
+      "title": "test",
+      "content": "tests test test",
+      "summary": "",
+      "category": "General",
+      "imageUrl": "/uploads/1765037920066-728250206.png",
+      "authorId": "admin",
+      "authorName": "admin@example.com",
+      "eventDate": {},
+      "id": "0c2d5b71-9dad-43c1-91f6-80a892b05de2",
+      "createdAt": "2025-12-06T16:18:40.141Z",
+      "updatedAt": "2025-12-06T16:18:40.141Z"
     }
   ],
   "users": [
-    
     {
       "id": "admin",
       "email": "admin@example.com",
