@@ -81,6 +81,19 @@ export function AnnouncementCard({
               <Calendar className="w-4 h-4" />
               <span data-testid={`text-time-${announcement.id}`}>{timeAgo}</span>
             </div>
+
+            {/* Event Date if present */}
+            {announcement.eventDate?.from && (
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" />
+                <span data-testid={`text-event-date-${announcement.id}`}>
+                  {announcement.eventDate.to
+                    ? `${new Date(announcement.eventDate.from).toLocaleDateString()} - ${new Date(announcement.eventDate.to).toLocaleDateString()}`
+                    : `On ${new Date(announcement.eventDate.from).toLocaleDateString()}`
+                  }
+                </span>
+              </div>
+            )}
           </div>
 
           {/* AI Summary if present */}
