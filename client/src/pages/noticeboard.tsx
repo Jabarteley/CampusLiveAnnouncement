@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Bell, RefreshCw } from "lucide-react";
 import { AnnouncementCard } from "@/components/announcement-card";
 import { SearchFilterBar } from "@/components/search-filter-bar";
+import { AnnouncementDetailModal } from "@/components/announcement-detail-modal";
 import type { Announcement, AnnouncementCategory } from "@shared/schema";
 
 export default function Noticeboard() {
@@ -11,10 +12,18 @@ export default function Noticeboard() {
   const [selectedCategory, setSelectedCategory] = useState<
     AnnouncementCategory | "All"
   >("All");
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { data: announcements = [], isLoading } = useQuery<Announcement[]>({
     queryKey: ["/api/announcements"],
     refetchInterval: 30000, // auto-refresh every 30 seconds
   });
+
+  const handleViewDetails = (announcement: Announcement) => {
+    setSelectedAnnouncement(announcement);
+    setIsModalOpen(true);
+  };
 
   // Filter announcements
   const filteredAnnouncements = announcements.filter((announcement) => {
@@ -224,6 +233,7 @@ export default function Noticeboard() {
                   key={announcement.id}
                   announcement={announcement}
                   index={index}
+                  onViewDetails={handleViewDetails}
                 />
               </motion.div>
             ))}
@@ -248,6 +258,13 @@ export default function Noticeboard() {
           </motion.div>
         )}
       </div>
+
+      {/* Announcement Detail Modal */}
+      <AnnouncementDetailModal
+        announcement={selectedAnnouncement}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

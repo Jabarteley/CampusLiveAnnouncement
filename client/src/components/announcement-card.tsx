@@ -13,6 +13,7 @@ interface AnnouncementCardProps {
   isAdmin?: boolean;
   onEdit?: (announcement: Announcement) => void;
   onDelete?: (id: string) => void;
+  onViewDetails?: (announcement: Announcement) => void;
 }
 
 export function AnnouncementCard({
@@ -21,6 +22,7 @@ export function AnnouncementCard({
   isAdmin = false,
   onEdit,
   onDelete,
+  onViewDetails,
 }: AnnouncementCardProps) {
   const colors = categoryColors[announcement.category];
   const timeAgo = formatDistanceToNow(new Date(announcement.createdAt), {
@@ -35,8 +37,9 @@ export function AnnouncementCard({
       whileHover={{ y: -4 }}
     >
       <Card
-        className={`group relative overflow-hidden backdrop-blur-lg bg-gradient-to-br ${colors.bg} border ${colors.border} shadow-lg ${colors.glow} hover:shadow-2xl transition-all duration-300 rounded-2xl`}
+        className={`group relative overflow-hidden backdrop-blur-lg bg-gradient-to-br ${colors.bg} border ${colors.border} shadow-lg ${colors.glow} hover:shadow-2xl transition-all duration-300 rounded-2xl cursor-pointer`}
         data-testid={`card-announcement-${announcement.id}`}
+        onClick={() => onViewDetails?.(announcement)}
       >
         {/* Category Badge */}
         <div className="absolute top-4 right-4 z-10">
@@ -122,15 +125,33 @@ export function AnnouncementCard({
             {announcement.content}
           </p>
 
+          {/* See More Button */}
+          <div className="mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click from also triggering
+                onViewDetails?.(announcement);
+              }}
+            >
+              See Full Announcement
+            </Button>
+          </div>
+
           {/* Admin Actions */}
           {isAdmin && (onEdit || onDelete) && (
-            <div className="flex gap-2 mt-6 pt-4 border-t border-white/20 dark:border-gray-700/30">
+            <div className="flex gap-2 mt-4 pt-4 border-t border-white/20 dark:border-gray-700/30">
               {onEdit && (
                 <Button
                   size="sm"
                   variant="outline"
                   className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50"
-                  onClick={() => onEdit(announcement)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(announcement);
+                  }}
                   data-testid={`button-edit-${announcement.id}`}
                 >
                   Edit
@@ -141,7 +162,10 @@ export function AnnouncementCard({
                   size="sm"
                   variant="destructive"
                   className="backdrop-blur-sm"
-                  onClick={() => onDelete(announcement.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(announcement.id);
+                  }}
                   data-testid={`button-delete-${announcement.id}`}
                 >
                   Delete
