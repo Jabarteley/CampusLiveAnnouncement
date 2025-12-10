@@ -36,6 +36,22 @@
       "id": "0c2d5b71-9dad-43c1-91f6-80a892b05de2",
       "createdAt": "2025-12-06T16:18:40.141Z",
       "updatedAt": "2025-12-06T16:18:40.141Z"
+    },
+    {
+      "title": "Test",
+      "content": "Prepare well for the upcoming test",
+      "summary": "",
+      "category": "General",
+      "imageUrl": "/uploads/1765400658986-753346317.png",
+      "authorId": "admin",
+      "authorName": "admin@example.com",
+      "eventDate": {
+        "from": "2025-12-12T00:00:00.000Z",
+        "to": "2025-12-20T00:00:00.000Z"
+      },
+      "id": "8ca74043-906d-4312-9a74-b6c1158e712c",
+      "createdAt": "2025-12-10T21:04:19.076Z",
+      "updatedAt": "2025-12-10T21:04:19.076Z"
     }
   ],
   "users": [

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 import {
   Bell,
   Plus,
@@ -38,6 +40,7 @@ export default function AdminDashboard() {
   const [content, setContent] = useState("");
   const [summary, setSummary] = useState("");
   const [category, setCategory] = useState<AnnouncementCategory>("General");
+  const [eventDate, setEventDate] = useState<DateRange | undefined>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -219,18 +222,27 @@ export default function AdminDashboard() {
       return;
     }
 
+    if (!eventDate?.from) {
+      toast({
+        title: "Missing date",
+        description: "Please fill in the required event start date",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
     formData.append("summary", summary);
-    // Skip eventDate since we removed the calendar functionality
-    // if (eventDate?.from) {
-    //   formData.append("eventDate[from]", eventDate.from.toISOString());
-    // }
-    // if (eventDate?.to) {
-    //   formData.append("eventDate[to]", eventDate.to.toISOString());
-    // }
+    // Add event date as simple text instead of calendar component
+    if (eventDate?.from) {
+      formData.append("eventDate[from]", eventDate.from.toISOString());
+    }
+    if (eventDate?.to) {
+      formData.append("eventDate[to]", eventDate.to.toISOString());
+    }
 
     if (imageFile) {
       formData.append("image", imageFile);
@@ -245,15 +257,14 @@ export default function AdminDashboard() {
     setContent(announcement.content);
     setCategory(announcement.category);
     setSummary(announcement.summary || "");
-    // Skip setting event dates since we removed calendar functionality
-    // if (announcement.eventDate?.from) {
-    //   setEventDate({
-    //     from: new Date(announcement.eventDate.from),
-    //     to: announcement.eventDate.to
-    //       ? new Date(announcement.eventDate.to)
-    //       : undefined,
-    //   });
-    // }
+    if (announcement.eventDate?.from) {
+      setEventDate({
+        from: new Date(announcement.eventDate.from),
+        to: announcement.eventDate.to
+          ? new Date(announcement.eventDate.to)
+          : undefined,
+      });
+    }
     if (announcement.imageUrl) {
       setImagePreview(announcement.imageUrl);
     }
@@ -502,15 +513,36 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <Label htmlFor="event-date">Event Date (optional)</Label>
-                  <Input
-                    id="event-date-from"
-                    type="text"
-                    placeholder="Event date functionality removed (optional)"
-                    className="mt-2 backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
-                    value=""
-                    readOnly
-                  />
+                  <Label htmlFor="event-date">Event Date *</Label>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                      <Label htmlFor="event-date-from">From *</Label>
+                      <Input
+                        id="event-date-from"
+                        type="date"
+                        value={eventDate?.from ? format(eventDate.from, "yyyy-MM-dd") : ""}
+                        onChange={(e) => {
+                          const newDate = e.target.value ? new Date(e.target.value) : undefined;
+                          setEventDate(prev => ({ from: newDate, to: prev?.to }));
+                        }}
+                        className="mt-1 backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="event-date-to">To</Label>
+                      <Input
+                        id="event-date-to"
+                        type="date"
+                        value={eventDate?.to ? format(eventDate.to, "yyyy-MM-dd") : ""}
+                        onChange={(e) => {
+                          const newDate = e.target.value ? new Date(e.target.value) : undefined;
+                          setEventDate(prev => ({ from: prev?.from, to: newDate }));
+                        }}
+                        className="mt-1 backdrop-blur-md bg-white/50 dark:bg-gray-800/50"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div>
