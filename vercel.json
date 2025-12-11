@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "campus-live-announcements",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/public"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "campusliveannouncement-production.up.railway.app"
+    }
+  ]
+}
